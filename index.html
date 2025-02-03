@@ -400,14 +400,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="phone" class="required">7. 휴대폰 번호</label>
-                  <div style="display: flex; align-items: center; gap: 5px;">
-                    <span style="width: 40px;">010</span>
-                    <span>-</span>
-                    <input type="text" id="phoneMiddle" maxlength="4" style="width: 80px;" required>
-                    <span>-</span>
-                    <input type="text" id="phoneLast" maxlength="4" style="width: 80px;" required>
-                  </div>
+                  <label for="phone">연락처</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="010-0000-0000" required>
                 </div>
 
                 <div class="form-group">
@@ -415,13 +409,11 @@
                   <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center;">
                       <span>키:</span>
-                      <input type="number" id="height" style="width: 60px; margin: 0 5px;">
-                      <span>cm</span>
+                      <input type="number" class="form-control" id="height" name="height" placeholder="cm 단위로 입력" min="100" max="250">
                     </div>
                     <div style="display: flex; align-items: center;">
                       <span>몸무게:</span>
-                      <input type="number" id="weight" style="width: 60px; margin: 0 5px;">
-                      <span>kg</span>
+                      <input type="number" class="form-control" id="weight" name="weight" placeholder="kg 단위로 입력" min="30" max="200">
                     </div>
                     <div style="display: flex; align-items: center;">
                       <span>옷사이즈:</span>
@@ -544,27 +536,11 @@
             return;
         }
 
-        const phoneMiddle = document.getElementById('phoneMiddle').value;
-        const phoneLast = document.getElementById('phoneLast').value;
+        const phone = document.getElementById('phone').value;
         
-        if (!phoneMiddle) {
-            alert('휴대폰 번호 중간자리를 입력해주세요.');
-            document.getElementById('phoneMiddle').focus();
-            return;
-        }
-        if (phoneMiddle.length < 4) {
-            alert('휴대폰 번호 중간자리를 4자리로 입력해주세요.');
-            document.getElementById('phoneMiddle').focus();
-            return;
-        }
-        if (!phoneLast) {
-            alert('휴대폰 번호 끝자리를 입력해주세요.');
-            document.getElementById('phoneLast').focus();
-            return;
-        }
-        if (phoneLast.length < 4) {
-            alert('휴대폰 번호 끝자리를 4자리로 입력해주세요.');
-            document.getElementById('phoneLast').focus();
+        if (!phone) {
+            alert('연락처를 입력해주세요.');
+            document.getElementById('phone').focus();
             return;
         }
 
@@ -589,7 +565,7 @@
             name: document.getElementById('name').value,
             gender: document.querySelector('input[name="gender"]:checked').value === 'male' ? '남' : '여',
             occupation: document.getElementById('occupation').value || '',
-            phone: `010-${phoneMiddle}-${phoneLast}`,
+            phone: phone,
             height: document.getElementById('height').value || '',
             weight: document.getElementById('weight').value || '',
             clothingSize: document.getElementById('clothingSize').value || '',
@@ -664,7 +640,7 @@
                 serviceName: document.getElementById('service').options[document.getElementById('service').selectedIndex].text,
                 name: document.getElementById('name').value,
                 gender: document.querySelector('input[name="gender"]:checked').value,
-                phone: `010-${document.getElementById('phoneMiddle').value}-${document.getElementById('phoneLast').value}`,
+                phone: document.getElementById('phone').value,
                 occupation: document.getElementById('occupation').value,
                 height: document.getElementById('height').value,
                 weight: document.getElementById('weight').value,
@@ -702,11 +678,7 @@
     }
 
     // 전화번호 숫자만 입력 가능하도록 설정
-    document.getElementById('phoneMiddle').addEventListener('input', function(e) {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '');
-    });
-
-    document.getElementById('phoneLast').addEventListener('input', function(e) {
+    document.getElementById('phone').addEventListener('input', function(e) {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
   </script>
