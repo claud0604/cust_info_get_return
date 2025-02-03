@@ -687,19 +687,16 @@
             const responseText = await response.text();  // 응답 텍스트로 받기
             console.log('Response text:', responseText);  // 응답 내용 확인
 
-            const result = JSON.parse(responseText);  // JSON 파싱
-            
-            if (result.success) {
-                document.getElementById('inputPage').style.display = 'none';
-                document.getElementById('completionPage').style.display = 'block';
-                displayFormData(result.data);
-                window.scrollTo(0, 0);
+            if (response.ok) {
+                const data = JSON.parse(responseText);
+                alert(data.message);  // 성공 메시지 표시
+                // displayFormData 대신 alert 사용
             } else {
-                alert(result.message || '오류가 발생했습니다.');
+                throw new Error('서버 응답 오류');
             }
 
         } catch (error) {
-            console.error('Detailed error:', error);  // 자세한 에러 정보
+            console.error('Detailed error:', error);
             alert('서버 통신 중 오류가 발생했습니다.');
         }
     }
