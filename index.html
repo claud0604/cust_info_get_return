@@ -442,11 +442,11 @@
                   <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div style="display: flex; align-items: center;">
                       <span style="width: 80px;">• 키:</span>
-                      <input type="number" class="form-control" id="height" name="height" placeholder="cm 단위로 입력" min="100" max="250" style="flex: 1;">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" id="height" name="height" placeholder="cm 단위로 입력" style="flex: 1;">
                     </div>
                     <div style="display: flex; align-items: center;">
                       <span style="width: 80px;">• 몸무게:</span>
-                      <input type="number" class="form-control" id="weight" name="weight" placeholder="kg 단위로 입력" min="30" max="200" style="flex: 1;">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" id="weight" name="weight" placeholder="kg 단위로 입력" style="flex: 1;">
                     </div>
                     <div style="display: flex; align-items: center;">
                       <span style="width: 80px;">• 옷사이즈:</span>
