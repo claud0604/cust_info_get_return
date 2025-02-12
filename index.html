@@ -314,14 +314,40 @@
 
     /* 1페이지 다음 버튼 스타일 */
     .next-btn {
-        margin-bottom: 50px;  /* 버튼 아래 여백 추가 */
+        display: block;  /* 블록 레벨 요소로 변경 */
+        margin: 0 auto 50px;  /* 좌우 마진을 auto로 설정하여 중앙 정렬 */
+        padding: 12px 40px;  /* 버튼 크기 유지 */
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+        transition: all 0.3s ease;
     }
+
+    .next-btn:hover {
+        background-color: #45a049;
+    }
+
+    .kakao-ad {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        min-height: 350px;
+        min-height: 200px;
+    }
+
   </style>
 </head>
 <body>
   <div class="page-container">
     <!-- 입력 페이지 -->
-    <div id="inputPage">
+     
+    <!-- <div id="inputPage"> -->
+    <div id="inputPage" style="display: none;">
+
         <div class="header-content">
             <h1>APL COLOR 고객정보</h1>
             <img src="./APLCOLOR_logo.png" alt="APL COLOR 로고" class="logo">
@@ -406,18 +432,18 @@
 
                 <div class="form-group">
                   <label>8. 신체 사이즈 (선택사항)</label>
-                  <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div style="display: flex; align-items: center;">
-                      <span>키:</span>
-                      <input type="number" class="form-control" id="height" name="height" placeholder="cm 단위로 입력" min="100" max="250">
+                      <span style="width: 80px;">• 키:</span>
+                      <input type="number" class="form-control" id="height" name="height" placeholder="cm 단위로 입력" min="100" max="250" style="flex: 1;">
                     </div>
                     <div style="display: flex; align-items: center;">
-                      <span>몸무게:</span>
-                      <input type="number" class="form-control" id="weight" name="weight" placeholder="kg 단위로 입력" min="30" max="200">
+                      <span style="width: 80px;">• 몸무게:</span>
+                      <input type="number" class="form-control" id="weight" name="weight" placeholder="kg 단위로 입력" min="30" max="200" style="flex: 1;">
                     </div>
                     <div style="display: flex; align-items: center;">
-                      <span>옷사이즈:</span>
-                      <input type="text" id="clothingSize" style="width: 120px; margin: 0 5px;" placeholder="55사이즈, 95사이즈">
+                      <span style="width: 80px;">• 옷사이즈:</span>
+                      <input type="text" id="clothingSize" placeholder="55사이즈, 95사이즈" style="flex: 1;">
                     </div>
                   </div>
                 </div>
@@ -432,13 +458,31 @@
                   <textarea id="stylePreference" rows="3" style="width: 100%; padding: 8px;" required placeholder="간단히 작성해주셔도 됩니다"></textarea>
                 </div>
 
+                <div class="form-group">
+                  <label>11. 고객사진 업로드 (선택사항)</label>
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; align-items: center;">
+                      <span>• 평소 화장스타일 사진</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                      <span>• 평소 패션스타일 사진</span>
+                    </div>
+                    <div style="color: #666; font-size: 14px; margin-top: 5px;">
+                      - 사진업로드는 카카오채널 채팅창에 직접 업로드 해주세요!
+                    </div>
+                  </div>
+                </div>
+
                 <button type="button" onclick="submitForm(event)" class="next-btn">다음</button>
             </form>
         </div>
     </div>
 
     <!-- 확인 페이지 -->
-    <div id="completionPage" style="display: none;">
+    
+    <!-- <div id="completionPage" style="display: none;"> -->
+    <div id="completionPage"></div>
+
         <div class="header-content">
             <h1>APL COLOR 고객정보</h1>
             <img src="./APLCOLOR_logo.png" alt="APL COLOR 로고" class="logo">
@@ -476,6 +520,14 @@
             <button onclick="completeForm()" class="complete-btn">완료</button>
         </div>
     </div>
+  </div>
+
+  <div class="kakao-ad">
+    <ins class="kakao_ad_area" style="display:none;"
+        data-ad-unit = "DAN-g3jKKGaQmBwqWLXL"
+        data-ad-width = "320"
+        data-ad-height = "100"></ins>
+    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
   </div>
 
   <script>
@@ -665,8 +717,8 @@
 
             if (response.ok) {
                 const data = JSON.parse(responseText);
-                alert(data.message);  // 성공 메시지 표시
-                // displayFormData 대신 alert 사용
+                alert("고객정보 입력 감사합니다.");  // 메시지 변경
+                window.close();  // 알림창 닫으면 창 닫기
             } else {
                 throw new Error('서버 응답 오류');
             }
