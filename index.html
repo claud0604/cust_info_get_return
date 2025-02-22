@@ -413,7 +413,7 @@
             <form id="customerForm">
                 <div class="form-group">
                   <label for="date" class="required">1. 진단 날짜</label>
-                  <input type="date" id="date" required>
+                  <input type="date" id="date" required min="<?php echo date('Y-m-d'); ?>">
                 </div>
 
                 <div class="form-group">
@@ -466,7 +466,7 @@
                     >
                     <span>-</span>
                     <input 
-                      type="text" 
+                      type="tel"
                       id="phone2" 
                       maxlength="4" 
                       pattern="[0-9]{4}" 
@@ -476,7 +476,7 @@
                     >
                     <span>-</span>
                     <input 
-                      type="text" 
+                      type="tel"
                       id="phone3" 
                       maxlength="4" 
                       pattern="[0-9]{4}" 
@@ -602,7 +602,7 @@
     window.onload = function() {
         window.scrollTo(0, 0);
         
-        // 기존 코드 유지
+        // 오늘 날짜를 구하고 date input의 min 속성 설정
         const today = new Date();
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -610,7 +610,7 @@
         const todayString = `${yyyy}-${mm}-${dd}`;
         
         const dateInput = document.getElementById('date');
-        dateInput.min = todayString;
+        dateInput.min = todayString;  // 오늘 이전 날짜 선택 불가
     }
 
     function submitForm(event) {
@@ -789,8 +789,9 @@
             document.getElementById('loadingSpinner').style.display = 'none';
 
             if (response.ok) {
-                alert("고객정보 입력 감사합니다.");
-                window.close();
+                if (confirm("고객정보 입력 감사합니다.")) {
+                    window.close();
+                }
             } else {
                 throw new Error('서버 응답 오류');
             }
