@@ -637,32 +637,38 @@
             return;
         }
 
-        // 나머지 필수 입력 검증
+        // 4. 예약 상품 검증
         if (!document.getElementById('service').value.trim()) {
             alert('예약 상품을 선택해주세요.');
             document.getElementById('service').focus();
             return;
         }
 
+        // 5. 성함 검증
         if (!document.getElementById('name').value.trim()) {
             alert('성함을 입력해주세요.');
             document.getElementById('name').focus();
             return;
         }
 
+        // 6. 성별 검증
         if (!document.querySelector('input[name="gender"]:checked')) {
             alert('성별을 선택해주세요.');
+            document.querySelector('input[name="gender"]').focus();
             return;
         }
 
-        const phone = document.getElementById('phone2').value + '-' + document.getElementById('phone3').value;
+        // 7. 연락처 검증
+        const phone2 = document.getElementById('phone2').value;
+        const phone3 = document.getElementById('phone3').value;
         
-        if (!phone) {
-            alert('연락처를 입력해주세요.');
+        if (!phone2 || !phone3 || phone2.length !== 4 || phone3.length !== 4) {
+            alert('연락처를 올바르게 입력해주세요.');
             document.getElementById('phone2').focus();
             return;
         }
 
+        // 나머지 필수 입력 검증
         if (!document.getElementById('reason').value.trim()) {
             alert('진단 의뢰이유를 입력해주세요.');
             document.getElementById('reason').focus();
@@ -684,7 +690,7 @@
             name: document.getElementById('name').value,
             gender: document.querySelector('input[name="gender"]:checked').value === 'male' ? '남' : '여',
             occupation: document.getElementById('occupation').value || '',
-            phone: phone,
+            phone: "010-" + document.getElementById('phone2').value + "-" + document.getElementById('phone3').value,
             height: document.getElementById('height').value || '',
             weight: document.getElementById('weight').value || '',
             clothingSize: document.getElementById('clothingSize').value || '',
