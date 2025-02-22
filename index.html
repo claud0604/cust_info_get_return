@@ -814,7 +814,7 @@
 
             if (response.ok) {
                 if (confirm("고객정보 입력 감사합니다.")) {
-                    window.close();
+                    window.open('', '_self').close();
                 }
             } else {
                 throw new Error('서버 응답 오류');
