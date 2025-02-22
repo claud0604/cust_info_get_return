@@ -346,6 +346,34 @@
         margin: 30px auto 0;
     }
 
+    /* 로딩 스피너 스타일 */
+    .spinner-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #4CAF50;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
   </style>
 </head>
 <body>
@@ -428,13 +456,40 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="occupation">6. 직업 (선택사항)</label>
-                  <input type="text" id="occupation" placeholder="예시: 서비스직, 영업직">
+                  <label for="phone" class="required">6. 연락처</label>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <input 
+                      type="text" 
+                      value="010" 
+                      disabled 
+                      style="width: 60px; background-color: #f8f9fa;"
+                    >
+                    <span>-</span>
+                    <input 
+                      type="text" 
+                      id="phone2" 
+                      maxlength="4" 
+                      pattern="[0-9]{4}" 
+                      required
+                      style="width: 80px;"
+                      oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 4) document.getElementById('phone3').focus();"
+                    >
+                    <span>-</span>
+                    <input 
+                      type="text" 
+                      id="phone3" 
+                      maxlength="4" 
+                      pattern="[0-9]{4}" 
+                      required
+                      style="width: 80px;"
+                      oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                    >
+                  </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="phone">연락처</label>
-                  <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="010-0000-0000" required>
+                  <label for="occupation">7. 직업 (선택사항)</label>
+                  <input type="text" id="occupation" placeholder="예시: 서비스직, 영업직">
                 </div>
 
                 <div class="form-group">
@@ -537,6 +592,11 @@
     <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
   </div>
 
+  <!-- 로딩 스피너 HTML -->
+  <div class="spinner-overlay" id="loadingSpinner">
+      <div class="spinner"></div>
+  </div>
+
   <script>
     // 페이지 로드 시 맨 위로 스크롤
     window.onload = function() {
@@ -595,11 +655,11 @@
             return;
         }
 
-        const phone = document.getElementById('phone').value;
+        const phone = document.getElementById('phone2').value + '-' + document.getElementById('phone3').value;
         
         if (!phone) {
             alert('연락처를 입력해주세요.');
-            document.getElementById('phone').focus();
+            document.getElementById('phone2').focus();
             return;
         }
 
@@ -693,13 +753,16 @@
 
     async function completeForm() {
         try {
+            // 로딩 스피너 표시
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            
             const formData = {
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
                 serviceName: document.getElementById('service').options[document.getElementById('service').selectedIndex].text,
                 name: document.getElementById('name').value,
                 gender: document.querySelector('input[name="gender"]:checked').value,
-                phone: document.getElementById('phone').value,
+                phone: "010-" + document.getElementById('phone2').value + "-" + document.getElementById('phone3').value,
                 occupation: document.getElementById('occupation').value,
                 height: document.getElementById('height').value,
                 weight: document.getElementById('weight').value,
@@ -707,8 +770,6 @@
                 reason: document.getElementById('reason').value,
                 stylePreference: document.getElementById('stylePreference').value
             };
-
-            console.log('Sending data:', formData);  // 전송하는 데이터 확인
 
             const response = await fetch('https://sm6x2p5ijl55hdjgyra2ds4tue0ieepr.lambda-url.ap-northeast-2.on.aws/', {
                 method: 'POST',
@@ -718,26 +779,29 @@
                 body: JSON.stringify(formData)
             });
 
-            console.log('Response status:', response.status);  // 응답 상태 확인
-            const responseText = await response.text();  // 응답 텍스트로 받기
-            console.log('Response text:', responseText);  // 응답 내용 확인
+            // 로딩 스피너 숨기기
+            document.getElementById('loadingSpinner').style.display = 'none';
 
             if (response.ok) {
-                const data = JSON.parse(responseText);
-                alert("고객정보 입력 감사합니다.");  // 메시지 변경
-                window.close();  // 알림창 닫으면 창 닫기
+                alert("고객정보 입력 감사합니다.");
+                window.close();
             } else {
                 throw new Error('서버 응답 오류');
             }
 
         } catch (error) {
-            console.error('Detailed error:', error);
+            // 에러 발생 시에도 로딩 스피너 숨기기
+            document.getElementById('loadingSpinner').style.display = 'none';
+            console.error('Error:', error);
             alert('서버 통신 중 오류가 발생했습니다.');
         }
     }
 
     // 전화번호 숫자만 입력 가능하도록 설정
-    document.getElementById('phone').addEventListener('input', function(e) {
+    document.getElementById('phone2').addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+    document.getElementById('phone3').addEventListener('input', function(e) {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
   </script>
