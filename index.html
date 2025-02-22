@@ -611,6 +611,30 @@
         
         const dateInput = document.getElementById('date');
         dateInput.min = todayString;  // 오늘 이전 날짜 선택 불가
+
+        // 날짜 입력 필드에 change 이벤트 리스너 추가
+        dateInput.addEventListener('change', function(e) {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // 시간 제거하고 날짜만 비교
+
+            if (selectedDate < today) {
+                alert('과거 날짜는 선택할 수 없습니다.');
+                this.value = todayString; // 오늘 날짜로 재설정
+            }
+        });
+
+        // 모바일용 입력 제한 추가
+        dateInput.addEventListener('input', function(e) {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                alert('과거 날짜는 선택할 수 없습니다.');
+                this.value = todayString;
+            }
+        });
     }
 
     function submitForm(event) {
