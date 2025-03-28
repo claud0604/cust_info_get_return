@@ -888,7 +888,7 @@
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-            const response = await fetch('https://sm6x2p5ijl55hdjgyra2ds4tue0ieepr.lambda-url.ap-northeast-2.on.aws/', {
+            const response = await fetch('http://158.180.75.12:8080/api/customer-info', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
